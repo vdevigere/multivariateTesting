@@ -37,17 +37,9 @@ public class Application extends Controller {
 	}
 
 	public static Result index() {
-		Promise<Map<String, Map<String, String>>> promiseOfTestData = play.libs.Akka
-				.future(new Callable<Map<String, Map<String, String>>>() {
-
-					@Override
-					public Map<String, Map<String, String>> call() throws Exception {
-						return fetchTestData();
-					}
-				});
+		Promise<Map<String, Map<String, String>>> promiseOfTestData = getPromiseOfTestData();
 		Promise<Result> promiseOfResult = promiseOfTestData
 				.map(new Function<Map<String, Map<String, String>>, Result>() {
-
 					@Override
 					public Result apply(Map<String, Map<String, String>> testData) throws Throwable {
 						List<String> randomVariants = new ArrayList<String>();
@@ -61,19 +53,39 @@ public class Application extends Controller {
 		return async(promiseOfResult);
 	}
 
-	private static Map<String, Map<String, String>> fetchTestData() {
-		Jedis jedis = pool.getResource();
-		Map<String, Map<String, String>> testData = new HashMap<String, Map<String, String>>();
-		try {
-			Set<String> testGroups = jedis.smembers("testgroups");
-			for (String testGroup : testGroups) {
-				testData.put(testGroup, jedis.hgetAll(testGroup));
-			}
+	public static Result testDataDisplay() {
+		Promise<Map<String, Map<String, String>>> promiseOfTestData = getPromiseOfTestData();
+		Promise<Result> promiseOfResult = promiseOfTestData
+				.map(new Function<Map<String, Map<String, String>>, Result>() {
+					@Override
+					public Result apply(Map<String, Map<String, String>> testData) throws Throwable {
+						Gson gson = new Gson();
+						return ok(gson.toJson(testData));
+					}
+				});
+		return async(promiseOfResult);
 
-			return testData;
-		} finally {
-			pool.returnResource(jedis);
-		}
+	}
+
+	private static Promise<Map<String, Map<String, String>>> getPromiseOfTestData() {
+		return play.libs.Akka.future(new Callable<Map<String, Map<String, String>>>() {
+
+			@Override
+			public Map<String, Map<String, String>> call() throws Exception {
+				Jedis jedis = pool.getResource();
+				Map<String, Map<String, String>> testData = new HashMap<String, Map<String, String>>();
+				try {
+					Set<String> testGroups = jedis.smembers("testgroups");
+					for (String testGroup : testGroups) {
+						testData.put(testGroup, jedis.hgetAll(testGroup));
+					}
+
+					return testData;
+				} finally {
+					pool.returnResource(jedis);
+				}
+			}
+		});
 	}
 
 	protected static String randomVariant(Map<String, String> variantMap) {
