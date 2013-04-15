@@ -20,14 +20,12 @@ import com.lambdaworks.redis.RedisAsyncConnection;
 public class WeightedRandomNumberGenerator extends SimpleChannelUpstreamHandler {
 	private RedisAsyncConnection<String, String> connection;
 
-	public WeightedRandomNumberGenerator(
-			RedisAsyncConnection<String, String> connection) {
+	public WeightedRandomNumberGenerator(RedisAsyncConnection<String, String> connection) {
 		this.connection = connection;
 	}
 
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
-			throws Exception {
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		Map<String, Map<String, String>> testMap = new HashMap<String, Map<String, String>>();
 		Future<Set<String>> sMembersFuture = connection.smembers("testgroups");
 		if (connection.awaitAll(sMembersFuture) == true) {
@@ -39,26 +37,21 @@ public class WeightedRandomNumberGenerator extends SimpleChannelUpstreamHandler 
 
 			if (connection.awaitAll() == true) {
 				for (String testGroup : hGetAllFuturesMap.keySet()) {
-					testMap.put(testGroup, hGetAllFuturesMap.get(testGroup)
-							.get());
+					testMap.put(testGroup, hGetAllFuturesMap.get(testGroup).get());
 				}
 			}
 		}
 
 		List<String> randomVariantList = getRandomVariantList(testMap);
-		e.getChannel().write(randomVariantList)
-				.addListener(new ChannelFutureListener() {
-					public void operationComplete(ChannelFuture future)
-							throws Exception {
-						future.getChannel().close();
-					}
-				});
+		e.getChannel().write(randomVariantList).addListener(new ChannelFutureListener() {
+			public void operationComplete(ChannelFuture future) throws Exception {
+				future.getChannel().close();
+			}
+		});
 	}
 
-	protected final List<String> getRandomVariantList(
-			Map<String, Map<String, String>> testMap)
-			throws NumberFormatException, InterruptedException,
-			ExecutionException {
+	protected final List<String> getRandomVariantList(Map<String, Map<String, String>> testMap)
+			throws NumberFormatException, InterruptedException, ExecutionException {
 		List<String> randomVariantList = new ArrayList<String>();
 		for (Map<String, String> variantsAndWeight : testMap.values()) {
 			// Compute the total weight of all items together
@@ -77,8 +70,7 @@ public class WeightedRandomNumberGenerator extends SimpleChannelUpstreamHandler 
 	}
 
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
-			throws Exception {
+	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
 		e.getCause().printStackTrace();
 		e.getChannel().close();
 	}

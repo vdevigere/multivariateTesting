@@ -26,10 +26,11 @@ public class HttpPipelineFactory implements ChannelPipelineFactory {
 	public ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline pipeline = Channels.pipeline();
 		pipeline.addLast("encoder", new HttpResponseEncoder());
-		pipeline.addLast("redisDb", executionHandler);
+		pipeline.addLast("JsonConverter", new JsonEncoder());
+		pipeline.addLast("executionHandler", executionHandler);
+//		pipeline.addLast("sleeper", new SleepChannelHandler());
 		pipeline.addLast("handler", new WeightedRandomNumberGenerator(
 				connection));
-		pipeline.addLast("JsonConverter", new JsonEncoder());
 		return pipeline;
 	}
 

@@ -17,8 +17,8 @@ public class JsonEncoder extends OneToOneEncoder {
 	private final Gson gson = new Gson();
 
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel channel,
-			Object msg) throws Exception {
+	protected Object encode(ChannelHandlerContext ctx, Channel channel, Object msg)
+			throws Exception {
 		HttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1,
 				HttpResponseStatus.OK);
 		response.setContent(ChannelBuffers.copiedBuffer(
