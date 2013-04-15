@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app>
+  <head>
+    <meta charset="utf-8">
+    <title>Multivariate Testing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">Multivariate Testing</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+    	<div class="row">
+    		<div class="span1"></div>
+    		<div class="span10" ng-controller="TestDataController">
+    		<form action="/tests/update" method="post">
+	    		<div class="container" ng-repeat="testGroup in testGroups">
+	    			<div class="row"><h3>{{testGroup.name}}</h3></div>
+	    			<div class="row">
+	    				<div class="container">
+							<div class="row" ng-repeat="variant in testGroup.variantsAndWeight">
+								<div class="span2">{{variant.variantName}}</div>
+								<div class="span10">
+									<input type="text" value="{{variant.weight}}" name="{{variant.variantName}}">
+									<a href="#"><i class="icon-trash"></i></a>
+								</div>
+							</div>
+						</div>
+					</div>  
+				</div>
+				<input type="submit">
+			</form>				
+    		</div>
+    		<div class="span1"></div>
+    	</div>
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+    <script type="text/javascript" src="../javascripts/jquery-1.9.0.min.js"></script>
+	<script type="text/javascript" src="../javascripts/testController.js"></script>
+  </body>
+</html>
