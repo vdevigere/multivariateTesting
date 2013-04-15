@@ -1,36 +1,39 @@
 package model;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class TestGroup {
 
-	private String name;
-	
-	private Set<VariantsAndWeight> variantsAndWeight = new HashSet<VariantsAndWeight>();
+    private String testName;
 
-	public TestGroup(String testGroupName, Map<String, String> variantMap) {
-		this.name = testGroupName;
-		for (String variantName : variantMap.keySet()) {
-			variantsAndWeight.add(new VariantsAndWeight(variantName,
-					new Double(variantMap.get(variantName))));
-		}
-	}
+    private List<Variant> variantList;
 
-	public String getName() {
-		return name;
-	}
+    public TestGroup() {
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public TestGroup(String testName, Map<String, String> variantMap) {
+        this.testName = testName;
+        variantList = new ArrayList<Variant>();
+        for (String variantName : variantMap.keySet()) {
+            variantList.add(new Variant(variantName, new Double(variantMap.get(variantName))));
+        }
+    }
 
-	public Set<VariantsAndWeight> getVariantsAndWeight() {
-		return variantsAndWeight;
-	}
+    public String getTestName() {
+        return testName;
+    }
 
-	public void setVariantsAndWeight(Set<VariantsAndWeight> variantsAndWeight) {
-		this.variantsAndWeight = variantsAndWeight;
-	}
+    public void setTestName(String testName) {
+        this.testName = testName;
+    }
+
+    public List<Variant> getVariantList() {
+        return variantList;
+    }
+
+    public void setVariantList(List<Variant> variantList) {
+        this.variantList = variantList;
+    }
 }

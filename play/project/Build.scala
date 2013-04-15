@@ -13,7 +13,7 @@ object ApplicationBuild extends Build {
     javaJdbc,
     javaEbean,
     "redis.clients"%"jedis"%"2.1.0",
-    "com.google.code.gson"%"gson"%"2.2.2"
+    "org.codehaus.jackson" % "jackson-core-asl" % "1.9.12"    
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
