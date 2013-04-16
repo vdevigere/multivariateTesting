@@ -123,9 +123,9 @@ public class Application extends Controller {
 
     private static Result generateRandomVariantResult(TestDataForm testData, String callback) throws IOException,
             JsonGenerationException, JsonMappingException {
-        List<String> randomVariants = new ArrayList<String>();
+        Map<String, String> randomVariants = new HashMap<String, String>();
         for (TestGroup testGroup : testData.getTestGroupList()) {
-            randomVariants.add(randomVariant(testGroup.getVariantList()));
+            randomVariants.put(testGroup.getTestName(),randomVariant(testGroup.getVariantList()));
         }
         Json json = new Json();
         JsonNode jsonNode = json.toJson(randomVariants);
