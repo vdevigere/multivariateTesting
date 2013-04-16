@@ -28,7 +28,6 @@ public class HttpPipelineFactory implements ChannelPipelineFactory {
 		pipeline.addLast("encoder", new HttpResponseEncoder());
 		pipeline.addLast("JsonConverter", new JsonEncoder());
 		pipeline.addLast("executionHandler", executionHandler);
-//		pipeline.addLast("sleeper", new SleepChannelHandler());
 		pipeline.addLast("handler", new WeightedRandomNumberGenerator(
 				connection));
 		return pipeline;

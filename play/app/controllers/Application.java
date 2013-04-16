@@ -22,7 +22,6 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.JsonMappingException;
 
-import play.Play;
 import play.data.Form;
 import play.libs.F.Promise;
 import play.libs.Json;
@@ -130,13 +129,6 @@ public class Application extends Controller {
         }
         Json json = new Json();
         JsonNode jsonNode = json.toJson(randomVariants);
-        String domain = Play.application().configuration().getString("application.defaultCookieDomain");
-        if (domain != null && !domain.isEmpty()) {
-            response().setCookie("Context", jsonNode.toString(), 1209600, "/", domain);
-        } else {
-            response().setCookie("Context", jsonNode.toString(), 1209600, "/");
-        }
-
         return ok(jsonp(callback, jsonNode)).as("application/json");
     }
 

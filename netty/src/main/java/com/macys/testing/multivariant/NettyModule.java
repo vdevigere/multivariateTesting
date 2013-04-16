@@ -41,8 +41,8 @@ public class NettyModule extends AbstractModule {
 	@Provides
 	public ChannelFactory getChannelFactory() {
 		ChannelFactory factory = new NioServerSocketChannelFactory(
-				Executors.newCachedThreadPool(),
-				Executors.newCachedThreadPool());
+				Executors.newCachedThreadPool(), 2,
+				Executors.newCachedThreadPool(), 2);
 		return factory;
 	}
 

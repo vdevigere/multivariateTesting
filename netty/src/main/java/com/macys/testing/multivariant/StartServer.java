@@ -24,8 +24,6 @@ public class StartServer extends AbstractIdleService {
 	private final ServerBootstrap bootstrap;
 	private final SocketAddress address;
 	private final ChannelFactory channelFactory;
-	private static final HttpResponseEncoder httpResponseEncoder = new HttpResponseEncoder();
-	private static final JsonEncoder jsonEncoder = new JsonEncoder();
 
 	@Inject
 	public StartServer(ChannelFactory channelFactory, SocketAddress address,
