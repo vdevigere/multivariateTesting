@@ -1,15 +1,16 @@
 function TestDataController($scope, $http) {
-	$http.get('/tests?callback=dummy').success(function(data) {
+	$http.jsonp('/tests?callback=JSON_CALLBACK').success(function(data){
+		console.log(data);
 		$scope.testGroups = data.testGroupList;
 	});
 
 	$scope.addTestGroup = function() {
-		$scope.testGroups = [ {
+		$scope.testGroups.push({
 			"testName" : "",
 			"variantList" : [ {
 				"variantName" : "",
 				"weight" : ""
 			}]
-		} ];
+		});
 	};
 };
