@@ -41,6 +41,7 @@ public class RedisPersister {
                 try {
                     jedis.del("testgroups");
                     for (TestGroup testGroup : testData.getTestGroupList()) {
+                        jedis.del(testGroup.getTestName());
                         jedis.sadd("testgroups", testGroup.getTestName());
                         for (Variant variant : testGroup.getVariantList()) {
                             jedis.hset(testGroup.getTestName(), variant.getVariantName(), variant.getWeight()

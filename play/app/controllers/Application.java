@@ -25,7 +25,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 public class Application extends Controller {
-    private final static Form<TestDataForm> testDataForm = form(TestDataForm.class);
     private static TestDataForm testData;
     private static final Random random = new Random();
 
@@ -70,13 +69,11 @@ public class Application extends Controller {
      * @return
      */
     public static Result saveTestData() {
-        Form<TestDataForm> form = testDataForm.bindFromRequest();
-        if (form.hasErrors()) {
-            System.out.println(form.errorsAsJson().toString());
-        }
-        Application.testData = form.get();
+        Form<TestDataForm> testDataForm = form(TestDataForm.class).bindFromRequest();
+        testData = testDataForm.get();
         Promise<Boolean> promiseOfStore = RedisPersister.getPromiseOfStoreTestData(testData);
-        return ok(promiseOfStore.get().toString());
+        //return ok(promiseOfStore.get().toString());
+        return redirect("/gui/test.html");
     }
 
     public static Result seedTestData() {
