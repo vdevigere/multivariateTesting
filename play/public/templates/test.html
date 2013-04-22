@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" ng-app>
 <head>
@@ -20,45 +19,38 @@ body {
 </head>
 
 <body>
-	<form method="POST">
+	<form method="POST" action="/save">
 		<div class="container" ng-controller="TestDataController">
-			<div class="span1"></div>
-			<div class="span10">
-				<div class="container-fluid">
+			<div ng-repeat="testGroup in testGroups">
+				<div class="row-fluid">
 					<!-- TEST GROUPS -->
-					<div class="row-fluid" ng-repeat="testGroup in testGroups">
-						<div class="span10">
-							<input type="text" name="testGroupList[{{$index}}].testName" value="{{testGroup.testName}}">
-						</div>
-						<div class="span2">
-							<a href="#"><i class="icon-trash"></i></a>
-						</div>
-						<!--  Variants -->
-						<div class="row-fluid" ng-repeat="variant in testGroup.variantList">
-							<div class="span4">
-								<input type="text" name="testGroupList[{{$parent.$index}}].variantList[{{$index}}].variantName"
-									value="{{variant.variantName}}">
-							</div>
-							<div class="span4">
-								<input type="text" name="testGroupList[{{$parent.$index}}].variantList[{{$index}}].weight"
-									value="{{variant.weight}}">
-							</div>
-							<div class="span4">
-								<a href="#"><i class="icon-trash"></i></a>
-							</div>
-						</div>
+					<div class="span3">
+						<input type="text" name="testGroupList[{{$index}}].testName" value="{{testGroup.testName}}">
 					</div>
-
+					<div class="span3"></div>
+					<div class="span3"></div>
+					<div class="span3">
+						<a ng-click="addTestGroup()"><i class="icon-plus"></i></a>
+						<a ng-click="removeTestGroup()"><i class="icon-trash"></i></a>
+					</div>
+				</div>
+				<!--  Variants -->
+				<div ng-repeat="variant in testGroup.variantList">
 					<div class="row-fluid">
-						<button ng-click="addTestGroup()" ><i class="icon-plus"></i></button>
+						<div class="span3"></div>
+						<div class="span3">
+							<input type="text" name="testGroupList[{{$parent.$index}}].variantList[{{$index}}].variantName"
+								value="{{variant.variantName}}">
+						</div>
+						<div class="span3">
+							<input type="text" name="testGroupList[{{$parent.$index}}].variantList[{{$index}}].weight"
+								value="{{variant.weight}}">
+						</div>
+						<div class="span3"></div>
 					</div>
 				</div>
 			</div>
-			<div class="span1"></div>
-			<div class="container-fluid">
-				<input type="submit"></input>
-			</div>
-
+			<input type="submit"></input>
 		</div>
 	</form>
 	<!-- /container -->

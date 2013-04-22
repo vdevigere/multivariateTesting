@@ -8,7 +8,7 @@ GET     /                                controllers.Application.index(callback:
 # CRUD tests
 GET     /tests                 controllers.Application.allTests(callback: String)
 GET		/seed                  controllers.Application.seedTestData()
-POST    /tests                 controllers.Application.saveTestData()
+POST    /save                 controllers.Application.saveTestData()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                    controllers.Assets.at(path="/public", file)

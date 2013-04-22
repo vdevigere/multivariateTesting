@@ -13,4 +13,8 @@ function TestDataController($scope, $http) {
 			}]
 		});
 	};
+	
+	$scope.removeTestGroup = function(){
+		$scope.testGroups.pop();
+	};
 };
