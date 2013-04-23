@@ -25,8 +25,9 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 public class Application extends Controller {
-   // private static TestDataForm testData;
+    private static TestDataForm testData;
     private static final Random random = new Random();
+    private static Boolean updateCache = true;
 
     /**
      * The main functionality that sets the cookie in a response.
@@ -37,15 +38,21 @@ public class Application extends Controller {
      * @throws JsonGenerationException
      */
     public static Result index(final String callback) throws JsonGenerationException, JsonMappingException, IOException {
-          Promise<TestDataForm> promiseOfTestData = RedisPersister.getPromiseOfTestData();
-          return async(promiseOfTestData.map(new Function<TestDataForm, Result>() {
+        if (testData == null || updateCache == true) {
+            Promise<TestDataForm> promiseOfTestData = RedisPersister.getPromiseOfTestData();
+            return async(promiseOfTestData.map(new Function<TestDataForm, Result>() {
 
-              @Override
-              public Result apply(TestDataForm testData) throws Throwable {
-                  return generateRandomVariantResult(testData,callback);
-              }
-          }));
-          
+                @Override
+                public Result apply(TestDataForm testData) throws Throwable {
+                    Application.testData = testData;
+                    Application.updateCache = false;
+                    return generateRandomVariantResult(testData, callback);
+                }
+            }));
+        } else {
+            return generateRandomVariantResult(testData, callback);
+        }
+
     }
 
     /**
@@ -56,7 +63,8 @@ public class Application extends Controller {
      * @throws JsonMappingException
      * @throws JsonGenerationException
      */
-    public static Result allTests(final String callback) throws JsonGenerationException, JsonMappingException, IOException {
+    public static Result allTests(final String callback) throws JsonGenerationException, JsonMappingException,
+            IOException {
         Promise<TestDataForm> promiseOfTestData = RedisPersister.getPromiseOfTestData();
         return async(promiseOfTestData.map(new Function<TestDataForm, Result>() {
 
@@ -77,7 +85,14 @@ public class Application extends Controller {
     public static Result saveTestData() {
         Form<TestDataForm> testDataForm = form(TestDataForm.class).bindFromRequest();
         Promise<Boolean> promiseOfStore = RedisPersister.getPromiseOfStoreTestData(testDataForm.get());
-        return redirect("/gui/test.html");
+        return async(promiseOfStore.map(new Function<Boolean, Result>() {
+
+            @Override
+            public Result apply(Boolean arg0) throws Throwable {
+                Application.updateCache = true;
+                return redirect("/gui/test.html");
+            }
+        }));
     }
 
     private static Result generateRandomVariantResult(TestDataForm testData, String callback) throws IOException,
