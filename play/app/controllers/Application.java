@@ -72,7 +72,11 @@ public class Application extends Controller {
             public Result apply(TestDataForm testData) throws Throwable {
                 Json json = new Json();
                 JsonNode jsonNode = json.toJson(testData);
-                return ok(jsonp(callback, jsonNode)).as("application/json");
+                if (callback != null) {
+                    return ok(jsonp(callback, jsonNode)).as("application/json");
+                }else{
+                    return ok(jsonNode).as("application/json");
+                }
             }
         }));
     }
@@ -97,13 +101,19 @@ public class Application extends Controller {
 
     private static Result generateRandomVariantResult(TestDataForm testData, String callback) throws IOException,
             JsonGenerationException, JsonMappingException {
+        Map<String, Map<String, String>> returnJson = new HashMap<String, Map<String, String>>();
         Map<String, String> randomVariants = new HashMap<String, String>();
         for (TestGroup testGroup : testData.getTestGroupList()) {
             randomVariants.put(testGroup.getTestName(), randomVariant(testGroup.getVariantList()));
         }
+        returnJson.put("EXPERIMENT", randomVariants);
         Json json = new Json();
-        JsonNode jsonNode = json.toJson(randomVariants);
-        return ok(jsonp(callback, jsonNode)).as("application/json");
+        JsonNode jsonNode = json.toJson(returnJson);
+        if (callback != null) {
+            return ok(jsonp(callback, jsonNode)).as("application/json");
+        } else {
+            return ok(jsonNode).as("application/json");
+        }
     }
 
     private static String randomVariant(List<Variant> variantList) {

@@ -3,10 +3,10 @@
 # ~~~~
 
 # Home page
-GET     /                                controllers.Application.index(callback: String)
+GET     /                                controllers.Application.index(callback: String ?=null)
 
 # CRUD tests
-GET     /tests                 controllers.Application.allTests(callback: String)
+GET     /tests                 controllers.Application.allTests(callback: String ?=null)
 POST    /save                 controllers.Application.saveTestData()
 
 # Map static resources from the /public folder to the /assets URL path
