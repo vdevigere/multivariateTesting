@@ -4,8 +4,8 @@ function TestDataController($scope, $http) {
 		$scope.testGroups = data.testGroupList;
 	});
 
-	$scope.addTestGroup = function() {
-		$scope.testGroups.push({
+	$scope.addTestGroup = function(index) {
+		$scope.testGroups.splice(index+1, 0, {
 			"testName" : "",
 			"variantList" : [ {
 				"variantName" : "",
@@ -14,7 +14,15 @@ function TestDataController($scope, $http) {
 		});
 	};
 	
-	$scope.removeTestGroup = function(){
-		$scope.testGroups.pop();
+	$scope.removeTestGroup = function(index){
+		$scope.testGroups.splice(index, 1);
 	};
+	
+	$scope.addVariant = function(parent, index){
+		$scope.testGroups[parent].variantList.splice(index+1, 0,{"variantName":"", "weight":""});
+	}
+
+	$scope.removeVariant = function(parent, index){
+		$scope.testGroups[parent].variantList.splice(index, 1);
+	}
 };

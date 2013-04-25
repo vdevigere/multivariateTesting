@@ -30,13 +30,13 @@ body {
 					<div class="span3"></div>
 					<div class="span3"></div>
 					<div class="span3">
-						<a ng-click="addTestGroup()"><i class="icon-plus"></i></a>
-						<a ng-click="removeTestGroup()"><i class="icon-trash"></i></a>
+						<a ng-click="addTestGroup($index)"><i class="icon-plus"></i></a>
+						<a ng-click="removeTestGroup($index)"><i class="icon-trash"></i></a>
 					</div>
 				</div>
 				<!--  Variants -->
 				<div ng-repeat="variant in testGroup.variantList">
-					<div class="row-fluid">
+					<div class="row-fluid well">
 						<div class="span3"></div>
 						<div class="span3">
 							<input type="text" name="testGroupList[{{$parent.$index}}].variantList[{{$index}}].variantName"
@@ -46,7 +46,10 @@ body {
 							<input type="text" name="testGroupList[{{$parent.$index}}].variantList[{{$index}}].weight"
 								value="{{variant.weight}}">
 						</div>
-						<div class="span3"></div>
+						<div class="span3">
+							<a ng-click="addVariant($parent.$index, $index)"><i class="icon-plus"></i></a>
+							<a ng-click="removeVariant($parent.$index, $index)"><i class="icon-trash"></i></a>
+						</div>
 					</div>
 				</div>
 			</div>

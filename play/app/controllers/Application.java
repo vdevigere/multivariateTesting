@@ -25,6 +25,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 public class Application extends Controller {
+    private static final String EXPERIMENT_ROOT = "EXPERIMENT";
     private static TestDataForm testData;
     private static final Random random = new Random();
     private static Boolean updateCache = true;
@@ -94,7 +95,7 @@ public class Application extends Controller {
             @Override
             public Result apply(Boolean arg0) throws Throwable {
                 Application.updateCache = true;
-                return redirect("/gui/test.html");
+                return redirect("/gui/index.html");
             }
         }));
     }
@@ -106,7 +107,7 @@ public class Application extends Controller {
         for (TestGroup testGroup : testData.getTestGroupList()) {
             randomVariants.put(testGroup.getTestName(), randomVariant(testGroup.getVariantList()));
         }
-        returnJson.put("EXPERIMENT", randomVariants);
+        returnJson.put(EXPERIMENT_ROOT, randomVariants);
         Json json = new Json();
         JsonNode jsonNode = json.toJson(returnJson);
         if (callback != null) {
